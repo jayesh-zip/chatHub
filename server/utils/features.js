@@ -14,7 +14,6 @@ const connectDB = (uri) => {
       .then((data) => console.log(`Connected to DB: ${data.connection.host}`))
       .catch((err) => {
         console.error("MongoDB connection error:", err);
-        process.exit(1);
       });
   };
 
@@ -22,7 +21,7 @@ const connectDB = (uri) => {
   const sendToken = (res, user, code, message) => {
     const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET);
   
-    return res.status(code).cookie("chattu-token", token, cookieOptions).json({
+    return res.status(code).cookie("session-token", token, cookieOptions).json({
       success: true,
       user,
       message,

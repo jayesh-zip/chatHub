@@ -1,7 +1,8 @@
 import { User } from "../models/user.js";
 import { TryCatch } from "../middlewares/error.js";
 import { sendToken } from "../utils/features.js";
-
+import { ErrorHandler } from "../utils/utility.js";
+import { compare } from "bcrypt";
 
 // Create a new user and save it to the database and save token in cookie
 const newUser = TryCatch(async (req, res, next) => {
@@ -32,19 +33,19 @@ const newUser = TryCatch(async (req, res, next) => {
   });
   
   // Login user and save token in cookie
-  const login = TryCatch(async (req, res, next) => {
-    const { username, password } = req.body;
-  
-    const user = await User.findOne({ username }).select("+password");
-  
-    if (!user) return next(new ErrorHandler("Invalid Username or Password", 404));
-  
-    const isMatch = await compare(password, user.password);
-  
-    if (!isMatch)
-      return next(new ErrorHandler("Invalid Username or Password", 404));
-  
-    sendToken(res, user, 200, `Welcome Back, ${user.name}`);
-  });
+const login = TryCatch(async (req, res, next) => {
+  const { username, password } = req.body;
+
+  const user = await User.findOne({ username }).select("+password");
+
+  if (!user) return next(new ErrorHandler("Invalid Username or Password", 404));
+
+  const isMatch = await compare(password, user.password);
+
+  if (!isMatch)
+    return next(new ErrorHandler("Invalid Username or Password", 404));
+
+  sendToken(res, user, 200, `Welcome Back, ${user.name}`);
+});
 
   export {newUser, login};
