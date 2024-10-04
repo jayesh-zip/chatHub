@@ -28,4 +28,4 @@ const connectDB = (uri) => {
     });
   };
 
-  export {connectDB, sendToken};
+  export {connectDB, sendToken, cookieOptions};

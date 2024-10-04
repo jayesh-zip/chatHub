@@ -1,6 +1,6 @@
 import { User } from "../models/user.js";
 import { TryCatch } from "../middlewares/error.js";
-import { sendToken } from "../utils/features.js";
+import { sendToken, cookieOptions } from "../utils/features.js";
 import { ErrorHandler } from "../utils/utility.js";
 import { compare } from "bcrypt";
 
@@ -48,4 +48,27 @@ const login = TryCatch(async (req, res, next) => {
   sendToken(res, user, 200, `Welcome Back, ${user.name}`);
 });
 
-  export {newUser, login};
+
+const getMyProfile = TryCatch(async (req, res, next) => {
+  const user = await User.findById(req.user);
+
+  if (!user) return next(new ErrorHandler("User not found", 404));
+
+  res.status(200).json({
+    success: true,
+    user,
+  });
+});
+
+const logout = TryCatch(async (req, res) => {
+  return res
+    .status(200)
+    .cookie("session-token", "", { ...cookieOptions, maxAge: 0 })
+    .json({
+      success: true,
+      message: "Logged out successfully",
+    });
+});
+
+
+export {newUser, login, getMyProfile, logout};
