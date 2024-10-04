@@ -28,4 +28,8 @@ const connectDB = (uri) => {
     });
   };
 
-  export {connectDB, sendToken, cookieOptions};
+  const emitEvent = (req, event, users, data) => {
+    console.log("Emithing Event", event);
+  };
+
+  export {connectDB, sendToken, cookieOptions, emitEvent};

@@ -4,6 +4,7 @@ import { connectDB } from "./utils/features.js";
 import userRoute from "./routes/user.js";
 import chatRoute from "./routes/chat.js";
 import cookieParser from "cookie-parser";
+import { createUser } from "./seeders/user.js";
 
 
 // Load environment variables from .env file
@@ -18,6 +19,7 @@ const port = process.env.PORT || 3000;
 // Connect to MongoDB
 connectDB(mongoURI);
 
+// createUser(10);
 
 // Initialize Express app
 const app = express();
