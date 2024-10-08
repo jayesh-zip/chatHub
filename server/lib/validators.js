@@ -21,4 +21,10 @@ const validateHandler = (req, res, next) => {
   ];
 
 
-export { validateHandler, registerValidator};
+  const loginValidator = () => [
+    body("username", "Please Enter Username").notEmpty(),
+    body("password", "Please Enter Password").notEmpty(),
+  ];
+
+
+export { validateHandler, registerValidator, loginValidator};
