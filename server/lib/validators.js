@@ -66,4 +66,19 @@ const validateHandler = (req, res, next) => {
     body("name", "Please Enter New Name").notEmpty(),
   ];
 
-export { validateHandler, registerValidator, loginValidator, newGroupValidator, addMemberValidator, removeMemberValidator, chatIdValidator, sendAttachmentsValidator, renameValidator};
+
+  const sendRequestValidator = () => [
+    body("userId", "Please Enter User ID").notEmpty(),
+  ];
+  
+  const acceptRequestValidator = () => [
+    body("requestId", "Please Enter Request ID").notEmpty(),
+    body("accept")
+      .notEmpty()
+      .withMessage("Please Add Accept")
+      .isBoolean()
+      .withMessage("Accept must be a boolean"),
+  ];
+
+
+export { validateHandler, registerValidator, loginValidator, newGroupValidator, addMemberValidator, removeMemberValidator, chatIdValidator, sendAttachmentsValidator, renameValidator, sendRequestValidator, acceptRequestValidator};
