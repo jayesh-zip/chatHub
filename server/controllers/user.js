@@ -2,6 +2,7 @@ import { User } from "../models/user.js";
 import { TryCatch } from "../middlewares/error.js";
 import { sendToken, cookieOptions, emitEvent } from "../utils/features.js";
 import { ErrorHandler } from "../utils/utility.js";
+import { getOtherMember } from "../lib/helper.js";
 import { compare } from "bcrypt";
 import { Chat } from "../models/chat.js";
 import { Request } from "../models/request.js";
@@ -194,6 +195,91 @@ const getMyNotifications = TryCatch(async (req, res) => {
   });
 });
 
+// ********************this code by me******************
+// const getMyFriends = TryCatch(async (req, res) => {
+//   const chatId = req.query.chatId;
+
+//   const chats = await Chat.find({
+//     members: req.user,
+//     groupChat: false,
+//   }).populate("members", "name avatar");
+
+//   const friends = chats.map(({ members }) => {
+//     const otherUser = getOtherMember(members, req.user);
+
+//     return {
+//       _id: otherUser._id,
+//       name: otherUser.name,
+//       avatar: otherUser.avatar.url,
+//     };
+//   });
+
+//   if (chatId) {
+//     const chat = await Chat.findById(chatId);
+
+//     const availableFriends = friends.filter(
+//       (friend) => !chat.members.includes(friend._id)
+//     );
+
+//     return res.status(200).json({
+//       success: true,
+//       friends: availableFriends,
+//     });
+//   } else {
+//     return res.status(200).json({
+//       success: true,
+//       friends,
+//     });
+//   }
+// });
 
 
-export {newUser, login, getMyProfile, logout, searchUser, sendFriendRequest, acceptFriendRequest, getMyNotifications};
+
+// ********************this code by chatgpt******************
+const getMyFriends = TryCatch(async (req, res) => {
+  const chatId = req.query.chatId;
+
+  const chats = await Chat.find({
+    members: req.user,
+    groupChat: false,
+  }).populate("members", "name avatar");
+
+  // Use a Set to store unique friend IDs and avoid duplicates
+  const friendSet = new Map();
+
+  chats.forEach(({ members }) => {
+    const otherUser = getOtherMember(members, req.user);
+    
+    if (!friendSet.has(otherUser._id.toString())) {
+      friendSet.set(otherUser._id.toString(), {
+        _id: otherUser._id,
+        name: otherUser.name,
+        avatar: otherUser.avatar.url,
+      });
+    }
+  });
+
+  const friends = Array.from(friendSet.values());
+
+  if (chatId) {
+    const chat = await Chat.findById(chatId);
+
+    const availableFriends = friends.filter(
+      (friend) => !chat.members.includes(friend._id.toString())
+    );
+
+    return res.status(200).json({
+      success: true,
+      friends: availableFriends,
+    });
+  } else {
+    return res.status(200).json({
+      success: true,
+      friends,
+    });
+  }
+});
+
+
+
+export {newUser, login, getMyProfile, logout, searchUser, sendFriendRequest, acceptFriendRequest, getMyNotifications, getMyFriends};

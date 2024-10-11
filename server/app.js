@@ -4,6 +4,7 @@ import { connectDB } from "./utils/features.js";
 import userRoute from "./routes/user.js";
 import chatRoute from "./routes/chat.js";
 import cookieParser from "cookie-parser";
+import { createSingleChats } from "./seeders/chat.js";
 
 // Load environment variables from .env file
 dotenv.config({
@@ -17,6 +18,7 @@ const port = process.env.PORT || 3000;
 // Connect to MongoDB
 connectDB(mongoURI);
 
+// createSingleChats(10);
 
 // Initialize Express app
 const app = express();
