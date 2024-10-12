@@ -6,6 +6,7 @@ import chatRoute from "./routes/chat.js";
 import adminRoute from "./routes/admin.js";
 import cookieParser from "cookie-parser";
 import { createSingleChats } from "./seeders/chat.js";
+import { errorMiddleware } from "./middlewares/error.js";
 
 // Load environment variables from .env file
 dotenv.config({
@@ -15,7 +16,8 @@ dotenv.config({
 // MongoDB URI and port from environment variables
 const mongoURI = process.env.MONGO_URI;
 const port = process.env.PORT || 3000;
-export const adminSecretKey = process.env.ADMIN_SECRET_KEY || "adsasdsdfsdfsdfd";
+const envMode = process.env.NODE_ENV.trim() || "PRODUCTION";
+const adminSecretKey = process.env.ADMIN_SECRET_KEY || "adsasdsdfsdfsdfd";
 
 
 // Connect to MongoDB
@@ -43,6 +45,15 @@ app.get("/", (req, res) => {
 });
 
 // Start the server
+// app.listen(port, () => {
+//     console.log(`Server is running on port ${port}`);
+// });
+
+app.use(errorMiddleware);
+
 app.listen(port, () => {
-    console.log(`Server is running on port ${port}`);
-});
+    console.log(`Server is running on port ${port} in ${envMode} Mode`);
+  });
+  
+
+export { envMode, adminSecretKey };
