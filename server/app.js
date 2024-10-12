@@ -15,6 +15,8 @@ dotenv.config({
 // MongoDB URI and port from environment variables
 const mongoURI = process.env.MONGO_URI;
 const port = process.env.PORT || 3000;
+export const adminSecretKey = process.env.ADMIN_SECRET_KEY || "adsasdsdfsdfsdfd";
+
 
 // Connect to MongoDB
 connectDB(mongoURI);

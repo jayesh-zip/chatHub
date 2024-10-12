@@ -81,4 +81,9 @@ const validateHandler = (req, res, next) => {
   ];
 
 
-export { validateHandler, registerValidator, loginValidator, newGroupValidator, addMemberValidator, removeMemberValidator, chatIdValidator, sendAttachmentsValidator, renameValidator, sendRequestValidator, acceptRequestValidator};
+  const adminLoginValidator = () => [
+    body("secretKey", "Please Enter Secret Key").notEmpty(),
+  ];
+
+
+export { validateHandler, registerValidator, loginValidator, newGroupValidator, addMemberValidator, removeMemberValidator, chatIdValidator, sendAttachmentsValidator, renameValidator, sendRequestValidator, acceptRequestValidator, adminLoginValidator};
