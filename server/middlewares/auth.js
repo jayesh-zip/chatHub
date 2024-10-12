@@ -2,6 +2,8 @@ import jwt from "jsonwebtoken";
 import { ErrorHandler } from "../utils/utility.js"
 import { TryCatch } from "./error.js";
 import { SESSION_TOKEN } from "../constants/config.js";
+import { adminSecretKey } from "../app.js";
+
 
 
 const isAuthenticated = TryCatch((req, res, next) => {
