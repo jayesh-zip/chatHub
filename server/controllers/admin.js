@@ -20,7 +20,7 @@ const adminLogin = TryCatch(async (req, res, next) => {
 
   return res
     .status(200)
-    .cookie("chattu-admin-token", token, {
+    .cookie("session-admin-token", token, {
       ...cookieOptions,
       maxAge: 1000 * 60 * 15,
     })
@@ -30,6 +30,20 @@ const adminLogin = TryCatch(async (req, res, next) => {
     });
 });
 
+
+
+const adminLogout = TryCatch(async (req, res, next) => {
+  return res
+    .status(200)
+    .cookie("session-admin-token", "", {
+      ...cookieOptions,
+      maxAge: 0,
+    })
+    .json({
+      success: true,
+      message: "Logged Out Successfully",
+    });
+});
 
 
 const allUsers = TryCatch(async (req, res) => {
@@ -172,4 +186,4 @@ const allUsers = TryCatch(async (req, res) => {
     });
   });
 
-export { allUsers, allChats, allMessages, getDashboardStats, adminLogin };
+export { allUsers, allChats, allMessages, getDashboardStats, adminLogin, adminLogout };
