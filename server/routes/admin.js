@@ -1,5 +1,5 @@
 import express from "express";
-import {allUsers} from "../controllers/admin.js";
+import {allChats, allUsers} from "../controllers/admin.js";
 // import { adminLoginValidator, validateHandler } from "../lib/validators.js";
 // import { adminOnly } from "../middlewares/auth.js";
 
@@ -16,7 +16,7 @@ const app = express.Router();
 // app.get("/", getAdminData);
 
 app.get("/users", allUsers);
-// app.get("/chats", allChats);
+app.get("/chats", allChats);
 // app.get("/messages", allMessages);
 
 // app.get("/stats", getDashboardStats);
