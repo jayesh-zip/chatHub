@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import { connectDB } from "./utils/features.js";
 import userRoute from "./routes/user.js";
 import chatRoute from "./routes/chat.js";
+import adminRoute from "./routes/admin.js";
 import cookieParser from "cookie-parser";
 import { createSingleChats } from "./seeders/chat.js";
 
@@ -31,6 +32,8 @@ app.use(cookieParser());
 // Define routes
 app.use("/user", userRoute);
 app.use("/chat", chatRoute);
+app.use("/admin", adminRoute);
+
 
 // Default route
 app.get("/", (req, res) => {
