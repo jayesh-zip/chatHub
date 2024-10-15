@@ -1,27 +1,42 @@
 import { lazy } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
-// import ProtectRoute from "./components/auth/ProtectRoute"; // Commented as no need for protected routes for now
-// import { LayoutLoader } from "./components/layout/Loaders";
+import ProtectRoute from "./components/auth/ProtectRoute";
 
-// Lazy loading the components
+// Lazy loading components
 const Home = lazy(() => import("./pages/Home"));
 const Login = lazy(() => import("./pages/Login"));
+const Chat = lazy(() => import("./pages/Chat"));
+const Groups = lazy(() => import("./pages/Groups"));
+const NotFound = lazy(() => import("./pages/NotFound"));
+
 
 const App = () => {
+  const user = false; // Mock user state for now
+
   return (
     <BrowserRouter>
-      {/* <Suspense fallback={<LayoutLoader />}> */}
-        <Routes>
-          {/* Display Home and Login routes only */}
+      <Routes>
+        {/* Protected routes */}
+        <Route element={<ProtectRoute user={user} />}>
           <Route path="/" element={<Home />} />
-          <Route path="/login" element={<Login />} />
+          <Route path="/chat/:chatId" element={<Chat />} />
+          <Route path="/groups" element={<Groups />} />
+        </Route>
 
-          {/* If any other routes are accessed, render the Home page */}
-          <Route path="*" element={<Home />} />
-        </Routes>
-      {/* </Suspense> */}
+        {/* Public route */}
+        <Route
+          path="/login"
+          element={
+            <ProtectRoute user={!user} redirect="/">
+              <Login />
+            </ProtectRoute>
+          }
+        />
 
+        {/* Catch-all route */}
+        <Route path="*" element={<NotFound />} />
+      </Routes>
       <Toaster position="bottom-center" />
     </BrowserRouter>
   );
