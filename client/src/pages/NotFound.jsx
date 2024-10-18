@@ -1,20 +1,42 @@
 import { Error as ErrorIcon } from "@mui/icons-material";
-import { Container, Stack, Typography } from "@mui/material";
+import { Container, Stack, Typography, Button } from "@mui/material";
 import { Link } from "react-router-dom";
 
 const NotFound = () => {
   return (
-    <Container maxWidth="lg" sx={{ height: "100vh" }}>
-      <Stack
-        alignItems={"center"}
-        spacing={"2rem"}
-        justifyContent={"center"}
-        height="100%"
-      >
-        <ErrorIcon sx={{ fontSize: "10rem" }} />
-        <Typography variant="h1">404</Typography>
-        <Typography variant="h3">Not Found</Typography>
-        <Link to="/">Go back to home</Link>
+    <Container
+      maxWidth="lg"
+      sx={{
+        height: "100vh",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        textAlign: "center",
+        backgroundColor: "#f5f5f5", // Light background for a softer feel
+      }}
+    >
+      <Stack alignItems={"center"} spacing={3}>
+        <ErrorIcon sx={{ fontSize: "8rem", color: "#ff6b6b" }} /> {/* Icon color enhanced */}
+        <Typography variant="h2" fontWeight="bold" color="primary">
+          404 - Page Not Found
+        </Typography>
+        <Typography variant="h5" color="textSecondary">
+          Oops! The page you're looking for doesn't exist.
+        </Typography>
+        <Button
+          variant="contained"
+          color="primary"
+          component={Link}
+          to="/"
+          sx={{
+            padding: "0.8rem 2rem",
+            fontSize: "1rem",
+            textTransform: "none",
+            borderRadius: "8px",
+          }}
+        >
+          Go Back to Home
+        </Button>
       </Stack>
     </Container>
   );
