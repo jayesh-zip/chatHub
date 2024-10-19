@@ -12,7 +12,7 @@ const NotFound = lazy(() => import("./pages/NotFound"));
 
 
 const App = () => {
-  const user = false; // Mock user state for now
+  const user = true; // Mock user state for now
 
   return (
     <BrowserRouter>
