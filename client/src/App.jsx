@@ -1,5 +1,6 @@
 import { lazy } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { LayoutLoader } from "./components/layout/Loaders";
 import { Toaster } from "react-hot-toast";
 import ProtectRoute from "./components/auth/ProtectRoute";
 
@@ -16,27 +17,29 @@ const App = () => {
 
   return (
     <BrowserRouter>
-      <Routes>
-        {/* Protected routes */}
-        <Route element={<ProtectRoute user={user} />}>
-          <Route path="/" element={<Home />} />
-          <Route path="/chat/:chatId" element={<Chat />} />
-          <Route path="/groups" element={<Groups />} />
-        </Route>
+      <Suspense fallback={<LayoutLoader />}>
+        <Routes>
+          {/* Protected routes */}
+          <Route element={<ProtectRoute user={user} />}>
+            <Route path="/" element={<Home />} />
+            <Route path="/chat/:chatId" element={<Chat />} />
+            <Route path="/groups" element={<Groups />} />
+          </Route>
 
-        {/* Public route */}
-        <Route
-          path="/login"
-          element={
-            <ProtectRoute user={!user} redirect="/">
-              <Login />
-            </ProtectRoute>
-          }
-        />
+          {/* Public route */}
+          <Route
+            path="/login"
+            element={
+              <ProtectRoute user={!user} redirect="/">
+                <Login />
+              </ProtectRoute>
+            }
+          />
 
-        {/* Catch-all route */}
-        <Route path="*" element={<NotFound />} />
-      </Routes>
+          {/* Catch-all route */}
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+        </Suspense>
       <Toaster position="bottom-center" />
     </BrowserRouter>
   );
