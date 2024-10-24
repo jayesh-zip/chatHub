@@ -28,15 +28,11 @@ const Login = () => {
 
   const avatar = useFileHandler("single");
 
-  // Remove dispatch, axios and toast imports since backend integration is disabled
-
   const handleLogin = (e) => {
     e.preventDefault();
     setIsLoading(true);
 
-    // Placeholder: Backend login API call goes here
 
-    // Remove the actual backend call and simulate the process for now
     setTimeout(() => {
       setIsLoading(false);
       alert("Login Successful (Simulated)");
@@ -47,9 +43,6 @@ const Login = () => {
     e.preventDefault();
     setIsLoading(true);
 
-    // Placeholder: Backend sign-up API call goes here
-
-    // Remove the actual backend call and simulate the process for now
     setTimeout(() => {
       setIsLoading(false);
       alert("Sign-up Successful (Simulated)");
