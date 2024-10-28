@@ -13,11 +13,11 @@ const NotFound = () => {
         justifyContent: "center",
         alignItems: "center",
         textAlign: "center",
-        backgroundColor: "#f5f5f5", // Light background for a softer feel
+        backgroundColor: "#f5f5f5",
       }}
     >
       <Stack alignItems={"center"} spacing={3}>
-        <ErrorIcon sx={{ fontSize: "8rem", color: "#ff6b6b" }} /> {/* Icon color enhanced */}
+        <ErrorIcon sx={{ fontSize: "8rem", color: "#ff6b6b" }} />
         <Typography variant="h2" fontWeight="bold" color="primary">
           404 - Page Not Found
         </Typography>
