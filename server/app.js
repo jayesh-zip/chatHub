@@ -6,9 +6,10 @@ import chatRoute from "./routes/chat.js";
 import adminRoute from "./routes/admin.js";
 import cookieParser from "cookie-parser";
 import { createSingleChats } from "./seeders/chat.js";
-import { errorMiddleware } from "./middlewares/error.js";,
+import { errorMiddleware } from "./middlewares/error.js";
 import cors from "cors";
 import { corsOptions } from "./constants/config.js";
+import { v2 as cloudinary } from "cloudinary";
 
 // Load environment variables from .env file
 dotenv.config({
@@ -24,6 +25,12 @@ const adminSecretKey = process.env.ADMIN_SECRET_KEY || "adsasdsdfsdfsdfd";
 
 // Connect to MongoDB
 connectDB(mongoURI);
+
+cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET,
+  });
 
 // createSingleChats(10);
 

@@ -1,6 +1,11 @@
 import { User } from "../models/user.js";
 import { TryCatch } from "../middlewares/error.js";
-import { sendToken, cookieOptions, emitEvent } from "../utils/features.js";
+import {
+  cookieOptions,
+  emitEvent,
+  sendToken,
+  uploadFilesToCloudinary,
+} from "../utils/features.js";
 import { ErrorHandler } from "../utils/utility.js";
 import { getOtherMember } from "../lib/helper.js";
 import { compare } from "bcrypt";
@@ -10,29 +15,29 @@ import { NEW_REQUEST, REFETCH_CHATS } from "../constants/events.js";
 
 // Create a new user and save it to the database and save token in cookie
 const newUser = TryCatch(async (req, res, next) => {
-    const { name, username, password, bio } = req.body;
-  
-    const file = req.file;
-  
-    if (!file) return next(new ErrorHandler("Please Upload Avatar"));
-  
-    // const result = await uploadFilesToCloudinary([file]);
-  
-    const avatar = {
-      public_id: "jmhv",
-      url: "jhvjj",
-    };
-  
-    const user = await User.create({
-      name,
-      bio,
-      username,
-      password,
-      avatar,
-    });
-  
-    sendToken(res, user, 201, "User created");
+  const { name, username, password, bio } = req.body;
+
+  const file = req.file;
+
+  if (!file) return next(new ErrorHandler("Please Upload Avatar"));
+
+  const result = await uploadFilesToCloudinary([file]);
+
+  const avatar = {
+    public_id: result[0].public_id,
+    url: result[0].url,
+  };
+
+  const user = await User.create({
+    name,
+    bio,
+    username,
+    password,
+    avatar,
   });
+
+  sendToken(res, user, 201, "User created");
+});
   
   // Login user and save token in cookie
 const login = TryCatch(async (req, res, next) => {
