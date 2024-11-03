@@ -6,7 +6,9 @@ import chatRoute from "./routes/chat.js";
 import adminRoute from "./routes/admin.js";
 import cookieParser from "cookie-parser";
 import { createSingleChats } from "./seeders/chat.js";
-import { errorMiddleware } from "./middlewares/error.js";
+import { errorMiddleware } from "./middlewares/error.js";,
+import cors from "cors";
+import { corsOptions } from "./constants/config.js";
 
 // Load environment variables from .env file
 dotenv.config({
@@ -32,6 +34,7 @@ const app = express();
 // Middleware to parse JSON bodies
 app.use(express.json());
 app.use(cookieParser());
+app.use(cors(corsOptions));
 
 // Define routes
 app.use("/api/v1/user", userRoute);
