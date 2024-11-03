@@ -34,9 +34,9 @@ app.use(express.json());
 app.use(cookieParser());
 
 // Define routes
-app.use("/user", userRoute);
-app.use("/chat", chatRoute);
-app.use("/admin", adminRoute);
+app.use("/api/v1/user", userRoute);
+app.use("/api/v1/chat", chatRoute);
+app.use("/api/v1/admin", adminRoute);
 
 
 // Default route
