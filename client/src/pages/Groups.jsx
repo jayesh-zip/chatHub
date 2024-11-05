@@ -203,7 +203,6 @@ const Groups = () => {
           </>
         )}
       </Grid>
-
       <Drawer
         sx={{
           display: {
