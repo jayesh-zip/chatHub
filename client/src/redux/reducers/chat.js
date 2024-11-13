@@ -22,10 +22,14 @@ const chatSlice = createSlice({
     incrementNotification: (state) => {
       state.notificationCount += 1;
     },
+    resetNotificationCount: (state) => {
+      state.notificationCount = 0;
+    },
   },
 });
 
 export default chatSlice;
 export const {
-  incrementNotification
+  incrementNotification,
+  resetNotificationCount
 } = chatSlice.actions;
