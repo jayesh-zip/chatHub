@@ -15,3 +15,17 @@ const initialState = {
   ],
 };
 
+const chatSlice = createSlice({
+  name: "chat",
+  initialState,
+  reducers: {
+    incrementNotification: (state) => {
+      state.notificationCount += 1;
+    },
+  },
+});
+
+export default chatSlice;
+export const {
+  incrementNotification
+} = chatSlice.actions;
