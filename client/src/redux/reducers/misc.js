@@ -27,6 +27,9 @@ const miscSlice = createSlice({
     },
     setIsNotification: (state, action) => {
       state.isNotification = action.payload;
+    },
+    setIsMobile: (state, action) => {
+      state.isMobile = action.payload;
     }
   },
 });
@@ -36,4 +39,5 @@ export const {
   setIsNewGroup,
   setIsAddMember,
   setIsNotification,
+  setIsMobile,
 } = miscSlice.actions;
