@@ -22,11 +22,14 @@ const miscSlice = createSlice({
     setIsNewGroup: (state, action) => {
       state.isNewGroup = action.payload;
     },
-    
+    setIsAddMember: (state, action) => {
+      state.isAddMember = action.payload;
+    }
   },
 });
 
 export default miscSlice;
 export const {
-  setIsNewGroup
+  setIsNewGroup,
+  setIsAddMember
 } = miscSlice.actions;
