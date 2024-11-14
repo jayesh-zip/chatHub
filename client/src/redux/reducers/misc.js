@@ -15,3 +15,18 @@ const initialState = {
   },
 };
 
+const miscSlice = createSlice({
+  name: "misc",
+  initialState,
+  reducers: {
+    setIsNewGroup: (state, action) => {
+      state.isNewGroup = action.payload;
+    },
+    
+  },
+});
+
+export default miscSlice;
+export const {
+  setIsNewGroup
+} = miscSlice.actions;
