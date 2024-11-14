@@ -30,6 +30,9 @@ const miscSlice = createSlice({
     },
     setIsMobile: (state, action) => {
       state.isMobile = action.payload;
+    },
+    setIsSearch: (state, action) => {
+      state.isSearch = action.payload;
     }
   },
 });
@@ -40,4 +43,5 @@ export const {
   setIsAddMember,
   setIsNotification,
   setIsMobile,
+  setIsSearch
 } = miscSlice.actions;
