@@ -40,6 +40,9 @@ const miscSlice = createSlice({
     setIsDeleteMenu: (state, action) => {
       state.isDeleteMenu = action.payload;
     },
+    setUploadingLoader: (state, action) => {
+      state.uploadingLoader = action.payload;
+    },
   },
 });
 
@@ -52,4 +55,5 @@ export const {
   setIsSearch,
   setIsFileMenu,
   setIsDeleteMenu,
+  setUploadingLoader,
 } = miscSlice.actions;
