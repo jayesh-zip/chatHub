@@ -34,6 +34,9 @@ const miscSlice = createSlice({
     setIsSearch: (state, action) => {
       state.isSearch = action.payload;
     }
+    setIsFileMenu: (state, action) => {
+      state.isFileMenu = action.payload;
+    },
   },
 });
 
@@ -43,5 +46,6 @@ export const {
   setIsAddMember,
   setIsNotification,
   setIsMobile,
-  setIsSearch
+  setIsSearch,
+  setIsFileMenu,
 } = miscSlice.actions;
