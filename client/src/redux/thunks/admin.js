@@ -17,7 +17,7 @@ const adminLogin = createAsyncThunk("admin/login", async (secretKey) => {
       config
     );
 
-    return data.message;
+    return data;
   } catch (error) {
     throw error.response.data.message;
   }
