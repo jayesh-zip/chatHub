@@ -15,6 +15,12 @@ import {
     Stack,
     Typography,
     styled,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogContentText,
+    DialogTitle,
+    Button,
   } from "@mui/material";
   import React, { useState } from "react";
   import { Link as LinkComponent, useLocation } from "react-router-dom";
@@ -55,6 +61,21 @@ import {
   
   const Sidebar = ({ w = "100%" }) => {
     const location = useLocation();
+    const [isLogoutDialogOpen, setIsLogoutDialogOpen] = useState(false);
+  
+    const handleLogout = () => {
+      setIsLogoutDialogOpen(true);
+    };
+  
+    const confirmLogout = () => {
+      setIsLogoutDialogOpen(false);
+      console.log("Logout confirmed");
+      // Implement logout logic here
+    };
+  
+    const cancelLogout = () => {
+      setIsLogoutDialogOpen(false);
+    };
   
     return (
       <Stack width={w} direction={"column"} p={"3rem"} spacing={"3rem"}>
@@ -83,14 +104,30 @@ import {
             </Link>
           ))}
   
-          <Link>
-            <Stack direction={"row"} alignItems={"center"} spacing={"1rem"}>
-              <ExitToAppIcon />
-  
-              <Typography>Logout</Typography>
-            </Stack>
-          </Link>
+          <Stack
+            direction={"row"}
+            alignItems={"center"}
+            spacing={"1rem"}
+            onClick={handleLogout}
+            sx={{ cursor: "pointer" }}
+          >
+            <ExitToAppIcon />
+            <Typography>Logout</Typography>
+          </Stack>
         </Stack>
+  
+        <Dialog open={isLogoutDialogOpen} onClose={cancelLogout}>
+          <DialogTitle>Confirm Logout</DialogTitle>
+          <DialogContent>
+            <DialogContentText>Are you sure you want to logout?</DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={cancelLogout}>Cancel</Button>
+            <Button onClick={confirmLogout} color="primary">
+              Logout
+            </Button>
+          </DialogActions>
+        </Dialog>
       </Stack>
     );
   };
