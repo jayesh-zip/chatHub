@@ -1,5 +1,10 @@
-import { User } from "../models/user.js";
+import { compare } from "bcrypt";
+import { NEW_REQUEST, REFETCH_CHATS } from "../constants/events.js";
+import { getOtherMember } from "../lib/helper.js";
 import { TryCatch } from "../middlewares/error.js";
+import { Chat } from "../models/chat.js";
+import { Request } from "../models/request.js";
+import { User } from "../models/user.js";
 import {
   cookieOptions,
   emitEvent,
@@ -7,11 +12,6 @@ import {
   uploadFilesToCloudinary,
 } from "../utils/features.js";
 import { ErrorHandler } from "../utils/utility.js";
-import { getOtherMember } from "../lib/helper.js";
-import { compare } from "bcrypt";
-import { Chat } from "../models/chat.js";
-import { Request } from "../models/request.js";
-import { NEW_REQUEST, REFETCH_CHATS } from "../constants/events.js";
 
 // Create a new user and save it to the database and save token in cookie
 const newUser = TryCatch(async (req, res, next) => {
@@ -38,8 +38,8 @@ const newUser = TryCatch(async (req, res, next) => {
 
   sendToken(res, user, 201, "User created");
 });
-  
-  // Login user and save token in cookie
+
+// Login user and save token in cookie
 const login = TryCatch(async (req, res, next) => {
   const { username, password } = req.body;
 
@@ -54,7 +54,6 @@ const login = TryCatch(async (req, res, next) => {
 
   sendToken(res, user, 200, `Welcome Back, ${user.name}`);
 });
-
 
 const getMyProfile = TryCatch(async (req, res, next) => {
   const user = await User.findById(req.user);
@@ -76,7 +75,6 @@ const logout = TryCatch(async (req, res) => {
       message: "Logged out successfully",
     });
 });
-
 
 const searchUser = TryCatch(async (req, res) => {
   const { name = "" } = req.query;
@@ -103,9 +101,8 @@ const searchUser = TryCatch(async (req, res) => {
   return res.status(200).json({
     success: true,
     users,
-  }); 
+  });
 });
-
 
 const sendFriendRequest = TryCatch(async (req, res, next) => {
   const { userId } = req.body;
@@ -131,8 +128,6 @@ const sendFriendRequest = TryCatch(async (req, res, next) => {
     message: "Friend Request Sent",
   });
 });
-
-
 
 const acceptFriendRequest = TryCatch(async (req, res, next) => {
   const { requestId, accept } = req.body;
@@ -176,7 +171,6 @@ const acceptFriendRequest = TryCatch(async (req, res, next) => {
   });
 });
 
-
 const getMyNotifications = TryCatch(async (req, res) => {
   const requests = await Request.find({ receiver: req.user }).populate(
     "sender",
@@ -198,47 +192,6 @@ const getMyNotifications = TryCatch(async (req, res) => {
   });
 });
 
-// ********************this code by me******************
-// const getMyFriends = TryCatch(async (req, res) => {
-//   const chatId = req.query.chatId;
-
-//   const chats = await Chat.find({
-//     members: req.user,
-//     groupChat: false,
-//   }).populate("members", "name avatar");
-
-//   const friends = chats.map(({ members }) => {
-//     const otherUser = getOtherMember(members, req.user);
-
-//     return {
-//       _id: otherUser._id,
-//       name: otherUser.name,
-//       avatar: otherUser.avatar.url,
-//     };
-//   });
-
-//   if (chatId) {
-//     const chat = await Chat.findById(chatId);
-
-//     const availableFriends = friends.filter(
-//       (friend) => !chat.members.includes(friend._id)
-//     );
-
-//     return res.status(200).json({
-//       success: true,
-//       friends: availableFriends,
-//     });
-//   } else {
-//     return res.status(200).json({
-//       success: true,
-//       friends,
-//     });
-//   }
-// });
-
-
-
-// ********************this code by chatgpt******************
 const getMyFriends = TryCatch(async (req, res) => {
   const chatId = req.query.chatId;
 
@@ -247,28 +200,21 @@ const getMyFriends = TryCatch(async (req, res) => {
     groupChat: false,
   }).populate("members", "name avatar");
 
-  // Use a Set to store unique friend IDs and avoid duplicates
-  const friendSet = new Map();
-
-  chats.forEach(({ members }) => {
+  const friends = chats.map(({ members }) => {
     const otherUser = getOtherMember(members, req.user);
-    
-    if (!friendSet.has(otherUser._id.toString())) {
-      friendSet.set(otherUser._id.toString(), {
-        _id: otherUser._id,
-        name: otherUser.name,
-        avatar: otherUser.avatar.url,
-      });
-    }
-  });
 
-  const friends = Array.from(friendSet.values());
+    return {
+      _id: otherUser._id,
+      name: otherUser.name,
+      avatar: otherUser.avatar.url,
+    };
+  });
 
   if (chatId) {
     const chat = await Chat.findById(chatId);
 
     const availableFriends = friends.filter(
-      (friend) => !chat.members.includes(friend._id.toString())
+      (friend) => !chat.members.includes(friend._id)
     );
 
     return res.status(200).json({
@@ -283,6 +229,14 @@ const getMyFriends = TryCatch(async (req, res) => {
   }
 });
 
-
-
-export {newUser, login, getMyProfile, logout, searchUser, sendFriendRequest, acceptFriendRequest, getMyNotifications, getMyFriends};
+export {
+  acceptFriendRequest,
+  getMyFriends,
+  getMyNotifications,
+  getMyProfile,
+  login,
+  logout,
+  newUser,
+  searchUser,
+  sendFriendRequest,
+};
