@@ -1,4 +1,4 @@
-import React, { Suspense, lazy, useEffect } from "react";
+import { Suspense, lazy, useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import ProtectRoute from "./components/auth/ProtectRoute";
 import { LayoutLoader } from "./components/layout/Loaders";
@@ -32,7 +32,7 @@ const App = () => {
     axios
       .get(`${server}/api/v1/user/me`, { withCredentials: true })
       .then(({ data }) => dispatch(userExists(data.user)))
-      .catch((err) => dispatch(userNotExists()));
+      .catch(() => dispatch(userNotExists()));
   }, [dispatch]);
 
   return loader ? (
