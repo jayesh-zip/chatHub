@@ -10,6 +10,8 @@ import { errorMiddleware } from "./middlewares/error.js";
 import cors from "cors";
 import { corsOptions } from "./constants/config.js";
 import { v2 as cloudinary } from "cloudinary";
+import { Server } from "socket.io";
+import { createServer } from "http";
 
 // Load environment variables from .env file
 dotenv.config({
@@ -36,6 +38,10 @@ cloudinary.config({
 
 // Initialize Express app
 const app = express();
+const server = createServer(app);
+const io = new Server(server, {
+
+});
 
 
 // Middleware to parse JSON bodies
@@ -58,6 +64,8 @@ app.get("/", (req, res) => {
 // app.listen(port, () => {
 //     console.log(`Server is running on port ${port}`);
 // });
+
+
 
 app.use(errorMiddleware);
 

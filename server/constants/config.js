@@ -10,4 +10,4 @@ const corsOptions = {
 
 const SESSION_TOKEN = "session-token";
 
-export { SESSION_TOKEN };
+export { corsOptions, SESSION_TOKEN };
