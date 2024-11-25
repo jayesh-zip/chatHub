@@ -28,14 +28,12 @@ const errorMiddleware = (err, req, res, next) => {
   return res.status(err.statusCode).json(response);
 };
 
-
-
 const TryCatch = (passedFunc) => async (req, res, next) => {
-    try {
-      await passedFunc(req, res, next);
-    } catch (error) {
-      next(error);
-    }
-  };
+  try {
+    await passedFunc(req, res, next);
+  } catch (error) {
+    next(error);
+  }
+};
 
-export {errorMiddleware, TryCatch};
+export { errorMiddleware, TryCatch };
