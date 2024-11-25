@@ -22,7 +22,6 @@ const chatSlice = createSlice({
     incrementNotification: (state) => {
       state.notificationCount += 1;
     },
-    
     resetNotificationCount: (state) => {
       state.notificationCount = 0;
     },
