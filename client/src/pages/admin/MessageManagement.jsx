@@ -1,8 +1,14 @@
-import { Avatar, Box, Skeleton, Stack } from "@mui/material";
-import React from "react";
+import { useFetchData } from "6pp";
+import { Avatar, Box, Stack } from "@mui/material";
+import { Skeleton } from "@mui/material";
+import moment from "moment";
+import { useEffect, useState } from "react";
 import AdminLayout from "../../components/layout/AdminLayout";
 import RenderAttachment from "../../components/shared/RenderAttachment";
 import Table from "../../components/shared/Table";
+import { server } from "../../constants/config";
+import { useErrors } from "../../hooks/hook";
+import { fileFormat, transformImage } from "../../lib/features";
 
 const columns = [
   {
@@ -18,22 +24,32 @@ const columns = [
     width: 200,
     renderCell: (params) => {
       const { attachments } = params.row;
+
       return attachments?.length > 0
-        ? attachments.map((i) => (
-            <Box>
-              <a
-                href={i.url}
-                download
-                target="_blank"
-                style={{ color: "black" }}
-              >
-                {RenderAttachment(i.file, i.url)}
-              </a>
-            </Box>
-          ))
+        ? attachments.map((i) => {
+            const url = i.url;
+            const file = fileFormat(url);
+
+            return (
+              <Box key={url}>
+                <a
+                  href={url}
+                  download
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    color: "black",
+                  }}
+                >
+                  {RenderAttachment(file, url)}
+                </a>
+              </Box>
+            );
+          })
         : "No Attachments";
     },
   },
+
   {
     field: "content",
     headerName: "Content",
@@ -72,26 +88,51 @@ const columns = [
   },
 ];
 
-const rows = [
-  {
-    id: 1,
-    attachments: [
-      { file: "pdf", url: "/example.pdf" },
-      { file: "image", url: "/example.jpg" },
-    ],
-    content: "Sample message content here",
-    sender: { name: "John Doe", avatar: "/avatar.jpg" },
-    chat: "Sample Chat",
-    groupChat: "Yes",
-    createdAt: "October 30, 2024, 10:30:00 AM",
-  },
-];
+const MessageManagement = () => {
+  const { loading, data, error } = useFetchData(
+    `${server}/api/v1/admin/messages`,
+    "dashboard-messages"
+  );
 
-const MessageManagement = () => (
-  <AdminLayout>
-    <Skeleton height={"100vh"} />
-    <Table heading={"All Messages"} columns={columns} rows={rows} rowHeight={200} />
-  </AdminLayout>
-);
+  useErrors([
+    {
+      isError: error,
+      error: error,
+    },
+  ]);
+
+  const [rows, setRows] = useState([]);
+
+  useEffect(() => {
+    if (data) {
+      setRows(
+        data.messages.map((i) => ({
+          ...i,
+          id: i._id,
+          sender: {
+            name: i.sender.name,
+            avatar: transformImage(i.sender.avatar, 50),
+          },
+          createdAt: moment(i.createdAt).format("MMMM Do YYYY, h:mm:ss a"),
+        }))
+      );
+    }
+  }, [data]);
+
+  return (
+    <AdminLayout>
+      {loading ? (
+        <Skeleton height={"100vh"} />
+      ) : (
+        <Table
+          heading={"All Messages"}
+          columns={columns}
+          rows={rows}
+          rowHeight={200}
+        />
+      )}
+    </AdminLayout>
+  );
+};
 
 export default MessageManagement;
