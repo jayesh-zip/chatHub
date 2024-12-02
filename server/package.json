@@ -1,7 +1,7 @@
 {
-  "name": "chathub",
+  "name": "server",
   "version": "1.0.0",
-  "description": "A chat application backend using MERN stack",
+  "description": "",
   "main": "app.js",
   "type": "module",
   "scripts": {
@@ -9,7 +9,7 @@
     "dev": "nodemon app.js"
   },
   "keywords": [],
-  "author": "Jayesh",
+  "author": "",
   "license": "ISC",
   "dependencies": {
     "bcrypt": "^5.1.1",
@@ -20,9 +20,9 @@
     "express": "^4.18.2",
     "express-validator": "^7.0.1",
     "jsonwebtoken": "^9.0.2",
-    "mongodb": "^6.9.0",
     "mongoose": "^8.2.0",
     "multer": "^1.4.5-lts.1",
+    "nodemailer": "^6.9.16",
     "socket.io": "^4.7.4",
     "uuid": "^9.0.1"
   },

@@ -69,25 +69,68 @@ const getMyProfile = TryCatch(async (req, res, next) => {
 const logout = TryCatch(async (req, res) => {
   return res
     .status(200)
-    .cookie("session-token", "", { ...cookieOptions, maxAge: 0 })
+    .cookie("chattu-token", "", { ...cookieOptions, maxAge: 0 })
     .json({
       success: true,
       message: "Logged out successfully",
     });
 });
 
+
+
+// const searchUser = TryCatch(async (req, res) => {
+//   const { name = "" } = req.query;
+
+//   // Finding All my chats
+//   const myChats = await Chat.find({ groupChat: false, members: req.user });
+
+//   //  extracting All Users from my chats means friends or people I have chatted with
+//   const allUsersFromMyChats = myChats.flatMap((chat) => chat.members);
+
+//   // Finding all users except me and my friends
+//   const allUsersExceptMeAndFriends = await User.find({
+//     _id: { $nin: allUsersFromMyChats },
+//     name: { $regex: name, $options: "i" },
+//   });
+
+//   // Modifying the response
+//   const users = allUsersExceptMeAndFriends.map(({ _id, name, avatar }) => ({
+//     _id,
+//     name,
+//     avatar: avatar.url,
+//   }));
+
+//   return res.status(200).json({
+//     success: true,
+//     users,
+//   });
+// });
+
+
+// Updated controller with the TryCatch wrapper
 const searchUser = TryCatch(async (req, res) => {
+  // Validate if user is authenticated
+  if (!req.user || !req.user._id) {
+    return res.status(401).json({
+      success: false,
+      message: "User not authenticated",
+    });
+  }
+
   const { name = "" } = req.query;
 
-  // Finding All my chats
+  // Finding all my chats (to identify friends or people I have chatted with)
   const myChats = await Chat.find({ groupChat: false, members: req.user });
 
-  //  extracting All Users from my chats means friends or people I have chatted with
+  // Extracting all users from my chats
   const allUsersFromMyChats = myChats.flatMap((chat) => chat.members);
 
-  // Finding all users except me and my friends
+  // Ensure unique user IDs and include the logged-in user for exclusion
+  const excludeIds = new Set([...allUsersFromMyChats.map((id) => id.toString()), req.user._id.toString()]);
+
+  // Finding all users except the logged-in user and their friends
   const allUsersExceptMeAndFriends = await User.find({
-    _id: { $nin: allUsersFromMyChats },
+    _id: { $nin: Array.from(excludeIds) },
     name: { $regex: name, $options: "i" },
   });
 
@@ -103,6 +146,8 @@ const searchUser = TryCatch(async (req, res) => {
     users,
   });
 });
+
+
 
 const sendFriendRequest = TryCatch(async (req, res, next) => {
   const { userId } = req.body;
@@ -128,6 +173,8 @@ const sendFriendRequest = TryCatch(async (req, res, next) => {
     message: "Friend Request Sent",
   });
 });
+
+
 
 const acceptFriendRequest = TryCatch(async (req, res, next) => {
   const { requestId, accept } = req.body;
@@ -170,6 +217,9 @@ const acceptFriendRequest = TryCatch(async (req, res, next) => {
     senderId: request.sender._id,
   });
 });
+
+
+
 
 const getMyNotifications = TryCatch(async (req, res) => {
   const requests = await Request.find({ receiver: req.user }).populate(
@@ -228,6 +278,7 @@ const getMyFriends = TryCatch(async (req, res) => {
     });
   }
 });
+
 
 export {
   acceptFriendRequest,
